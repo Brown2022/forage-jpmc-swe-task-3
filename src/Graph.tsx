@@ -3,6 +3,8 @@ import { Table } from '@finos/perspective';
 import { ServerRespond } from './DataStreamer';
 import { DataManipulator } from './DataManipulator';
 import './Graph.css';
+import  PerspectiveViewerElement  from '@finos/perspective' 
+
 
 interface IProps {
   data: ServerRespond[],
@@ -20,7 +22,7 @@ class Graph extends Component<IProps, {}> {
 
   componentDidMount() {
     // Get element from the DOM.
-    const elem = document.getElementsByTagName('perspective-viewer')[0] as unknown as PerspectiveViewerElement;
+    const elem = document.getElementsByTagName('perspective-viewer')[0] as PerspectiveViewerElement;
 
     const schema = {
       stock: 'string',
@@ -32,6 +34,16 @@ class Graph extends Component<IProps, {}> {
     if (window.perspective && window.perspective.worker()) {
       this.table = window.perspective.worker().table(schema);
     }
+    /**
+     * check if elem is not undefined before
+     * attempting to load the table 
+     */
+    
+    if(elem) {
+      // Load and configure the table
+      console.error('perapective-viewer element not found');
+    }
+
     if (this.table) {
       // Load the `table` in the `<perspective-viewer>` DOM reference.
       elem.load(this.table);
@@ -50,7 +62,7 @@ class Graph extends Component<IProps, {}> {
 
   componentDidUpdate() {
     if (this.table) {
-      this.table.update(
+      this.table?.update(
         DataManipulator.generateRow(this.props.data),
       );
     }

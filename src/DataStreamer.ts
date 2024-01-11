@@ -14,13 +14,16 @@ class DataStreamer {
 
   static getData(callback: (data: ServerRespond[]) => void): void {
     const request = new XMLHttpRequest();
-    request.open('GET', DataStreamer.API_URL, false);
+    request.open('GET', DataStreamer.API_URL, true);
 
     request.onload = () => {
       if (request.status === 200) {
         callback(JSON.parse(request.responseText));
       } else {
-        alert ('Request failed');
+        // Throw an error or invoke an error callback
+        //allows DataStreamer.getData to handle error in 
+        //more efficient way
+        console.error('Request failed:', request.status);
       }
     }
 
