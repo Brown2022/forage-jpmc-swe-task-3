@@ -4,11 +4,11 @@ import Graph from './Graph';
 import './App.css';
 
 interface IState {
-  data: ServerRespond[],
-  showGraph: boolean,
+  data: ServerRespond[] | null;
+  showGraph: boolean | null;
 }
 
-class App extends Component<{}, IState> {
+class App extends React.Component<{}, IState> {
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -19,7 +19,7 @@ class App extends Component<{}, IState> {
 
   renderGraph() {
     if (this.state.showGraph) {
-      return (<Graph data={this.state.data}/>)
+      return <Graph data = {this.state.data}/>;
     }
   }
 
@@ -31,14 +31,16 @@ class App extends Component<{}, IState> {
           data: serverResponds,
           showGraph: true,
         });
-      });
+      },
+    );
+      
       x++;
       if (x > 1000) {
         clearInterval(interval);
       }
     }, 100);
   }
-
+  
   render() {
     return (
       <div className="App">
@@ -46,7 +48,7 @@ class App extends Component<{}, IState> {
           Bank Merge & Co Task 3
         </header>
         <div className="App-content">
-          <button className="btn btn-primary Stream-button" onClick={() => {this.getDataFromServer()}}>Start Streaming Data</button>
+          <button className="btn btn-primary Stream-button" onClick={() => {this.getDataFromServer()}}>{this.state.showGraph ? 'Stop Streaming Data' : 'Start Streaming Data'}</button>
           <div className="Graph">
             {this.renderGraph()}
           </div>
@@ -55,5 +57,6 @@ class App extends Component<{}, IState> {
     )
   }
 }
+
 
 export default App;
